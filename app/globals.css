@@ -1,5 +1,13 @@
+@import "tailwindcss";
+
 :root {
-  --dovita-green: #1E5B3A;
-  --dovita-gold: #C8A24D;
-  --dovita-white: #FFFFFF;
+  --dovita-green: #0b6b3a;
+  --dovita-gold: #d4af37;
+  --dovita-white: #ffffff;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: white;
+  color: #0f1f17;
 }
