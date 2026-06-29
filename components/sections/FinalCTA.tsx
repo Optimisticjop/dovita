@@ -1,32 +1,86 @@
 import Link from "next/link";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function FinalCTA() {
   return (
-    <section className="py-20 bg-yellow-50">
-      <div className="max-w-4xl mx-auto text-center px-6">
-        <h2 className="text-3xl font-bold">
-          Start Your Skin Transformation Today
+    <section className="relative overflow-hidden py-24">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-50 via-white to-green-50" />
+
+      {/* Glow Effects */}
+      <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-yellow-300/20 blur-3xl" />
+      <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-green-200/20 blur-3xl" />
+
+      <div className="relative max-w-4xl mx-auto px-6 text-center">
+        {/* Badge */}
+        <span className="inline-flex rounded-full bg-yellow-100 px-5 py-2 text-sm font-semibold text-yellow-700">
+          Personalized Beauty Care
+        </span>
+
+        {/* Heading */}
+        <h2 className="mt-6 text-4xl lg:text-5xl font-bold text-green-900">
+          Not Sure Where To Start?
         </h2>
 
-        <p className="text-gray-600 mt-3">
-          Book a consultation or explore our best-selling products.
+        {/* Description */}
+        <p className="mt-6 text-lg leading-8 text-slate-600 max-w-2xl mx-auto">
+          Book a personalized consultation and receive expert guidance tailored
+          to your skin and hair concerns.
         </p>
 
-        <div className="flex justify-center gap-4 mt-8">
-          <Link
-            href="/consultation"
-            className="bg-green-800 text-white px-6 py-3 rounded-full"
+        {/* Buttons */}
+        <div className="mt-10 flex flex-wrap justify-center gap-4">
+          <a
+            href="https://wa.me/233241876182"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+    inline-flex
+    items-center
+    gap-2
+    mt-6
+    rounded-full
+    bg-gradient-to-r
+    from-yellow-500
+    to-yellow-400
+    px-6
+    py-3
+    font-semibold
+    text-green-950
+    shadow-lg
+    hover:scale-105
+    transition
+  "
           >
-            Book Consultation
-          </Link>
+            <FaWhatsapp />
+            Chat on WhatsApp
+          </a>
 
           <Link
-            href="/shop"
-            className="border border-green-800 text-green-800 px-6 py-3 rounded-full"
+            href="/contact"
+            className="
+              rounded-full
+              border
+              border-green-200
+              bg-white
+              px-8
+              py-4
+              font-semibold
+              text-green-800
+              shadow-sm
+              hover:bg-green-50
+              transition-all
+            "
           >
-            Shop Now
+            Contact Us
           </Link>
         </div>
+
+        {/* Trust Line */}
+        <p className="mt-8 text-sm text-slate-500">
+          Trusted by hundreds of clients seeking healthier skin and stronger
+          hair.
+        </p>
       </div>
     </section>
   );

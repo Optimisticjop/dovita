@@ -6,6 +6,7 @@ import ResultsPreview from "@/components/sections/ResultsPreview";
 import BrandPromise from "@/components/sections/BrandPromise";
 import FDAApproved from "@/components/sections/FDAApproved";
 import FinalCTA from "@/components/sections/FinalCTA";
+import Testimonials from "@/components/sections/Testimonials";
 
 export default function HomePage() {
   return (
@@ -15,6 +16,7 @@ export default function HomePage() {
       <FeaturedCollections />
       <FeaturedProducts />
       <ResultsPreview />
+      <Testimonials />
       <BrandPromise />
       <FDAApproved />
       <FinalCTA />
