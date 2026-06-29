@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
+import { ArrowRight } from "lucide-react";
 
 export default function FinalCTA() {
   return (
@@ -35,44 +36,51 @@ export default function FinalCTA() {
             target="_blank"
             rel="noopener noreferrer"
             className="
-    inline-flex
-    items-center
-    gap-2
-    mt-6
-    rounded-full
-    bg-gradient-to-r
-    from-yellow-500
-    to-yellow-400
-    px-6
-    py-3
-    font-semibold
-    text-green-950
-    shadow-lg
-    hover:scale-105
-    transition
-  "
+      inline-flex
+      items-center
+      gap-2
+      rounded-full
+      bg-gradient-to-r
+      from-yellow-500
+      to-yellow-400
+      px-6
+      py-3
+      font-semibold
+      text-green-950
+      shadow-lg
+      hover:scale-105
+      transition-all
+      duration-300
+    "
           >
-            <FaWhatsapp />
+            <FaWhatsapp size={18} />
             Chat on WhatsApp
           </a>
 
           <Link
             href="/contact"
             className="
-              rounded-full
-              border
-              border-green-200
-              bg-white
-              px-8
-              py-4
-              font-semibold
-              text-green-800
-              shadow-sm
-              hover:bg-green-50
-              transition-all
-            "
+    inline-flex
+    items-center
+    gap-2
+    rounded-full
+    border
+    border-green-200
+    bg-white
+    px-6
+    py-3
+    font-semibold
+    text-green-800
+    shadow-lg
+    hover:bg-green-50
+    hover:border-green-400
+    hover:scale-105
+    transition-all
+    duration-300
+  "
           >
             Contact Us
+            <ArrowRight size={18} />
           </Link>
         </div>
 
