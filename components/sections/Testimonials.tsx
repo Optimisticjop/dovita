@@ -1,53 +1,67 @@
-export default function Testimonials() {
-  const testimonials = [
-    {
-      name: "Ama K.",
-      review:
-        "My skin became noticeably brighter within a few weeks. I finally found products that work for me.",
-    },
-    {
-      name: "Marielle B.",
-      review:
-        "The hair treatment routine helped reduce breakage and improve growth.",
-    },
-    {
-      name: "Fidel P.",
-      review:
-        "Professional consultation and amazing products. Highly recommended.",
-    },
-  ];
+import Image from "next/image";
+
+import { getTestimonials } from "@/lib/actions/testimonials";
+
+export default async function Testimonials() {
+  const testimonials = await getTestimonials();
+
+  if (testimonials.length === 0) return null;
 
   return (
-    <section className="py-24 bg-green-50">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center">
-          <span className="text-yellow-500 font-semibold uppercase tracking-[0.3em]">
+    <section className="bg-green-50 py-24">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="font-semibold uppercase tracking-[0.3em] text-yellow-500">
             Testimonials
           </span>
 
-          <h2 className="mt-4 text-4xl font-bold text-green-900">
+          <h2 className="mt-4 text-4xl font-bold text-green-900 lg:text-5xl">
             Loved By Our Clients
           </h2>
+
+          <p className="mt-4 text-slate-600">
+            Every testimonial reflects the confidence our customers have gained
+            through consistent care and personalized skincare solutions.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mt-16">
-          {testimonials.map((item) => (
+        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {testimonials.map((testimonial) => (
             <div
-              key={item.name}
-              className="
-                bg-white
-                p-8
-                rounded-3xl
-                shadow-sm
-                border
-                border-green-100
-              "
+              key={testimonial.id}
+              className="group rounded-3xl border border-green-100 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
             >
-              <div className="text-yellow-500 text-xl">★★★★★</div>
+              <div className="flex items-center gap-4">
+                <div className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-green-100">
+                  <Image
+                    src={testimonial.image}
+                    alt={testimonial.customer_name}
+                    fill
+                    sizes="64px"
+                    className="object-cover"
+                  />
+                </div>
 
-              <p className="mt-4 text-slate-600">"{item.review}"</p>
+                <div>
+                  <h3 className="font-bold text-green-900">
+                    {testimonial.customer_name}
+                  </h3>
 
-              <h4 className="mt-6 font-bold text-green-900">{item.name}</h4>
+                  <p className="text-sm text-slate-500">
+                    {testimonial.location}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 text-xl">
+                {Array.from({ length: testimonial.rating }).map((_, index) => (
+                  <span key={index}>⭐</span>
+                ))}
+              </div>
+
+              <p className="mt-6 leading-8 text-slate-600">
+                "{testimonial.testimonial}"
+              </p>
             </div>
           ))}
         </div>

@@ -1,12 +1,74 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 
+import { uploadConsultationImage } from "@/lib/actions/upload";
+import { createConsultation } from "@/lib/actions/consultations";
+
 export default function ConsultationForm() {
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
+  const [concern, setConcern] = useState("");
+
+  const [message, setMessage] = useState("");
+
+  const [images, setImages] = useState<File[]>([]);
+
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      const uploadedImages: string[] = [];
+
+      for (const file of images) {
+        const url = await uploadConsultationImage(file);
+        uploadedImages.push(url);
+      }
+
+      await createConsultation({
+        full_name: fullName,
+        phone,
+        email,
+        age: Number(age),
+        gender,
+        concern,
+        message,
+        images: uploadedImages,
+      });
+
+      alert("Consultation submitted successfully!");
+
+      setFullName("");
+      setPhone("");
+      setEmail("");
+      setAge("");
+      setGender("");
+      setConcern("");
+      setMessage("");
+      setImages([]);
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <section id="consultation-form" className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16">
+      <div className="max-w-7xl mx-auto px-6 grid gap-16 lg:grid-cols-2">
         {/* FORM */}
 
-        <div className="bg-white rounded-3xl border border-green-100 shadow-lg p-10">
+        <div className="rounded-3xl border border-green-100 bg-white p-10 shadow-lg">
           <h2 className="text-4xl font-bold text-green-900">
             Consultation Form
           </h2>
@@ -16,41 +78,68 @@ export default function ConsultationForm() {
             you shortly.
           </p>
 
-          <form className="mt-10 space-y-6">
+          <form onSubmit={handleSubmit} className="mt-10 space-y-6">
             <input
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
               placeholder="Full Name"
               className="w-full rounded-xl border p-4"
+              required
             />
 
             <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               placeholder="Phone Number"
               className="w-full rounded-xl border p-4"
+              required
             />
 
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Email Address"
               className="w-full rounded-xl border p-4"
             />
 
-            <div className="grid md:grid-cols-2 gap-5">
-              <input placeholder="Age" className="rounded-xl border p-4" />
+            <div className="grid gap-5 md:grid-cols-2">
+              <input
+                type="number"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                placeholder="Age"
+                className="rounded-xl border p-4"
+                required
+              />
 
-              <select className="rounded-xl border p-4">
-                <option>Gender</option>
+              <select
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                className="rounded-xl border p-4"
+                required
+              >
+                <option value="">Gender</option>
                 <option>Female</option>
                 <option>Male</option>
               </select>
             </div>
 
-            <select className="w-full rounded-xl border p-4">
-              <option>Primary Concern</option>
+            <select
+              value={concern}
+              onChange={(e) => setConcern(e.target.value)}
+              className="w-full rounded-xl border p-4"
+              required
+            >
+              <option value="">Primary Concern</option>
               <option>Acne</option>
               <option>Hyperpigmentation</option>
               <option>Dry Skin</option>
               <option>Hair Growth</option>
               <option>Hair Loss</option>
             </select>
+
+            {/* UI Only */}
 
             <input
               placeholder="How long have you experienced this?"
@@ -69,15 +158,26 @@ export default function ConsultationForm() {
 
             <textarea
               rows={5}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               placeholder="Describe your concern"
               className="w-full rounded-xl border p-4"
+              required
             />
 
             <input
               type="file"
               multiple
+              accept="image/*"
               className="w-full rounded-xl border p-4"
+              onChange={(e) => {
+                if (e.target.files) {
+                  setImages(Array.from(e.target.files));
+                }
+              }}
             />
+
+            {/* UI Only */}
 
             <select className="w-full rounded-xl border p-4">
               <option>Preferred Contact Method</option>
@@ -96,18 +196,11 @@ export default function ConsultationForm() {
             </label>
 
             <button
-              className="
-                w-full
-                rounded-full
-                bg-gradient-to-r
-                from-green-700
-                to-yellow-500
-                py-4
-                text-white
-                font-semibold
-              "
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-full bg-gradient-to-r from-green-700 to-yellow-500 py-4 font-semibold text-white"
             >
-              Submit Consultation
+              {loading ? "Submitting..." : "Submit Consultation"}
             </button>
           </form>
         </div>
@@ -115,21 +208,22 @@ export default function ConsultationForm() {
         {/* RIGHT */}
 
         <div>
-          <div className="relative h-[420px] rounded-[35px] overflow-hidden shadow-xl">
+          <div className="relative h-[420px] overflow-hidden rounded-[35px] shadow-xl">
             <Image
               src="/Consultation.webp"
               alt="Consultation"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
           </div>
 
-          <div className="mt-10 rounded-3xl bg-green-50 border border-green-100 p-8">
+          <div className="mt-10 rounded-3xl border border-green-100 bg-green-50 p-8">
             <h3 className="text-2xl font-bold text-green-900">
               What Happens Next?
             </h3>
 
-            <div className="space-y-6 mt-8">
+            <div className="mt-8 space-y-6">
               <div>
                 <h4 className="font-semibold">✔ We review your submission</h4>
                 <p className="text-slate-600">

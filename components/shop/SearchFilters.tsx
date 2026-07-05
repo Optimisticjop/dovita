@@ -11,9 +11,7 @@ export default function SearchFilters() {
               Find Your Perfect Product
             </h3>
 
-            <p className="mt-1 text-slate-600">
-              Showing 12 products
-            </p>
+            <p className="mt-1 text-slate-600">Showing 12 products</p>
           </div>
 
           <div className="flex flex-wrap gap-4">
