@@ -10,6 +10,7 @@ import {
   ImageIcon,
   MessageSquareQuote,
   Leaf,
+  MessageCircleIcon,
 } from "lucide-react";
 import LogoutButton from "./LogoutButton";
 
@@ -43,6 +44,11 @@ const menu = [
     name: "Testimonials",
     href: "/admin/testimonials",
     icon: MessageSquareQuote,
+  },
+  {
+    name: "Contact Messages",
+    href: "/admin/messages",
+    icon: MessageCircleIcon,
   },
 ];
 

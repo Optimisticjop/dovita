@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { Mail } from "lucide-react";
 
 import {
   Package,
@@ -23,7 +24,7 @@ export default async function DashboardPage() {
     redirect("/admin/login");
   }
 
-  const [products, categories, consultations, results, testimonials] =
+  const [products, categories, consultations, results, testimonials, messages] =
     await Promise.all([
       supabase.from("products").select("*", { count: "exact", head: true }),
       supabase.from("categories").select("*", { count: "exact", head: true }),
@@ -36,6 +37,9 @@ export default async function DashboardPage() {
         count: "exact",
         head: true,
       }),
+      supabase
+        .from("contact_messages")
+        .select("*", { count: "exact", head: true }),
     ]);
 
   return (
@@ -43,7 +47,6 @@ export default async function DashboardPage() {
       {/* Welcome */}
 
       <div className="rounded-3xl bg-gradient-to-r from-green-700 to-green-500 p-8 text-white shadow-lg">
-
         <p className="mt-2 text-green-100">Logged in as {user.email}</p>
       </div>
 
@@ -84,6 +87,13 @@ export default async function DashboardPage() {
           icon={MessageSquareQuote}
           color="bg-pink-500"
         />
+
+        <StatCard
+          title="Messages"
+          value={messages.count ?? 0}
+          icon={Mail}
+          color="bg-orange-500"
+        />
       </div>
 
       {/* Quick Actions */}
@@ -104,6 +114,8 @@ export default async function DashboardPage() {
             title="Manage Testimonials"
             href="/admin/testimonials"
           />
+
+          <DashboardAction title="Contact Messages" href="/admin/messages" />
         </div>
       </div>
     </div>
