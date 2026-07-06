@@ -3,18 +3,44 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
-export async function getProducts() {
+type ProductFilters = {
+  search?: string;
+  category?: string;
+  sort?: string;
+};
+
+export async function getProducts(filters?: ProductFilters) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from("products")
-    .select(
-      `
+  let query = supabase.from("products").select(`
       *,
-      categories(name)
-    `,
-    )
-    .order("created_at", { ascending: false });
+      categories(id, name)
+    `);
+
+  if (filters?.search) {
+    query = query.ilike("name", `%${filters.search}%`);
+  }
+
+  if (filters?.category) {
+    query = query.eq("category_id", filters.category);
+  }
+
+  switch (filters?.sort) {
+    case "low":
+      query = query.order("price", { ascending: true });
+      break;
+
+    case "high":
+      query = query.order("price", { ascending: false });
+      break;
+
+    default:
+      query = query.order("created_at", {
+        ascending: false,
+      });
+  }
+
+  const { data, error } = await query;
 
   if (error) throw error;
 
@@ -26,7 +52,12 @@ export async function getProduct(id: string) {
 
   const { data, error } = await supabase
     .from("products")
-    .select("*")
+    .select(
+      `
+      *,
+      categories(id,name)
+    `,
+    )
     .eq("id", id)
     .single();
 
@@ -49,6 +80,7 @@ export async function createProduct(formData: {
   if (error) throw error;
 
   revalidatePath("/admin/products");
+  revalidatePath("/shop");
 }
 
 export async function updateProduct(
@@ -71,6 +103,7 @@ export async function updateProduct(
   if (error) throw error;
 
   revalidatePath("/admin/products");
+  revalidatePath("/shop");
 }
 
 export async function deleteProduct(id: string) {
@@ -81,4 +114,5 @@ export async function deleteProduct(id: string) {
   if (error) throw error;
 
   revalidatePath("/admin/products");
+  revalidatePath("/shop");
 }

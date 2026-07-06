@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import ProductGallery from "@/components/products/ProductGallery";
 import ProductInfo from "@/components/products/ProductInfo";
 import ProductBenefits from "@/components/products/ProductBenefits";
@@ -7,17 +9,32 @@ import ProductFAQ from "@/components/products/ProductFAQ";
 import RelatedProducts from "@/components/products/RelatedProducts";
 import FinalCTA from "@/components/sections/FinalCTA";
 
-export default function ProductPage() {
+import { getProduct } from "@/lib/actions/products";
+
+type Props = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
+export default async function ProductPage({ params }: Props) {
+  const { id } = await params;
+
+  const product = await getProduct(id);
+
+  if (!product) {
+    notFound();
+  }
+
   return (
     <>
-      <ProductGallery images={["/p1.png", "/p2.png", "/p1.png"]} />
+      <ProductGallery images={[product.image]} />
 
       <ProductInfo
-        name="Glow Radiance Serum"
-        category="Skincare"
-        concern="Hyperpigmentation"
-        price="GH₵220"
-        description="A lightweight brightening serum formulated to reduce dark spots, improve skin texture and reveal a healthy, radiant complexion."
+        name={product.name}
+        category={product.categories?.name ?? ""}
+        price={Number(product.price)}
+        description={product.description}
       />
 
       <ProductBenefits />
