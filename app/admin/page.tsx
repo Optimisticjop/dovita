@@ -15,14 +15,14 @@ import DashboardAction from "@/components/admin/DashboardCard";
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+//   const {
+//     data: { user },
+//   } = await supabase.auth.getUser();
 
-  // Extra safety for TypeScript
-  if (!user) {
-    redirect("/admin/login");
-  }
+//   // Extra safety for TypeScript
+//   if (!user) {
+//     redirect("/admin/login");
+//   }
 
   const [products, categories, consultations, results, testimonials, messages] =
     await Promise.all([
@@ -52,7 +52,7 @@ export default async function DashboardPage() {
       <div className="rounded-3xl bg-gradient-to-r from-green-700 to-green-500 p-8 text-white shadow-lg">
         <h1 className="text-3xl font-bold">Dashboard</h1>
 
-        <p className="mt-2 text-green-100">Logged in as {user.email}</p>
+        {/* <p className="mt-2 text-green-100">Logged in as {user.email}</p> */}
       </div>
 
       {/* Stats */}
