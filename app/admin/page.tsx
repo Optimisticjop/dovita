@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Mail } from "lucide-react";
-
 import {
   Package,
   FolderOpen,
@@ -20,6 +19,7 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Extra safety for TypeScript
   if (!user) {
     redirect("/admin/login");
   }
@@ -32,26 +32,30 @@ export default async function DashboardPage() {
         count: "exact",
         head: true,
       }),
-      supabase.from("results").select("*", { count: "exact", head: true }),
+      supabase.from("results").select("*", {
+        count: "exact",
+        head: true,
+      }),
       supabase.from("testimonials").select("*", {
         count: "exact",
         head: true,
       }),
-      supabase
-        .from("contact_messages")
-        .select("*", { count: "exact", head: true }),
+      supabase.from("contact_messages").select("*", {
+        count: "exact",
+        head: true,
+      }),
     ]);
 
   return (
     <div className="space-y-8">
       {/* Welcome */}
-
       <div className="rounded-3xl bg-gradient-to-r from-green-700 to-green-500 p-8 text-white shadow-lg">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+
         <p className="mt-2 text-green-100">Logged in as {user.email}</p>
       </div>
 
       {/* Stats */}
-
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
         <StatCard
           title="Products"
@@ -97,7 +101,6 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-
       <div>
         <h2 className="mb-5 text-2xl font-bold text-green-900">
           Quick Actions
